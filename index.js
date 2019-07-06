@@ -1,35 +1,26 @@
-const express = require('express');
-const passport = require('passport');
-const GoogleStrategy = require('passport-google-oauth20').Strategy;
-// const GoogleStrategy = require('passport-google-oauth20'); //la nueva
-const keys = require('./config/keys');
+const express = require('express'); //importar librería express para manejar mejor la arquitectura de apps web escritas en nodejs
+const mongoose = require('mongoose'); //importar librería mongoose para modelado elegante de objetos mongodb
+const cookieSession = require('cookie-session'); //manejo de cookies
+const passport = require('passport'); //intermediario de autenticación para apps en node.js
+const keys = require('./config/keys'); //claves
+require('./models/User'); //requerir el modelo User sin asignarlo a una variable, solo importarlo para usarlo aquí directamente
+require('./services/passport'); // requerir el script passport para usarlo directamente aquí
 
-const app = express();
+mongoose.connect(keys.mongoURI);//de la instancia mongoose, usar el método connect para conectarse a la base de datos
 
-passport.use(
-    new GoogleStrategy(
-        {
-            clientID: keys.googleClientID,
-            clientSecret: keys.googleClientSecret,
-            callbackURL: '/auth/google/callback',
-        }, 
-        (accessToken, refreshToken, profile, done) => {
-            console.log('access token: ' + accessToken);
-            console.log('refresh token: ' + refreshToken);
-            console.log('profile:');
-            console.log(profile);
-        }
-    )
-);
+const app = express(); //crear una instancia de la clase express. crear una app express
 
-app.get(
-    '/auth/google', 
-    passport.authenticate('google', {
-        scope: ['profile', 'email']
+app.use(//
+    cookieSession({
+        maxAge: 30 * 24 * 60 * 60 * 1000,
+        keys: [keys.cookieKey],
     })
 );
 
-app.get('/auth/google/callback', passport.authenticate('google'));
+app.use(passport.initialize());
+app.use(passport.session());
+
+require('./routes/authRoutes')(app);
 
 const PORT = process.env.PORT || 5000;
 
