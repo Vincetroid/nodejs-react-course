@@ -1,7 +1,7 @@
-const passport = require('passport');
-const GoogleStrategy = require('passport-google-oauth20').Strategy;
-const mongoose = require('mongoose');
-const keys = require('../config/keys');
+const passport = require('passport'); //requerir la libreria passport que sirve de facilitador en la autenticacion de usuario en nodejs
+const GoogleStrategy = require('passport-google-oauth20').Strategy; //libreria de autenticacion oauth de google
+const mongoose = require('mongoose'); //requerir mongoose la cual facilita la transición entre mongoDB y el código
+const keys = require('../config/keys'); //claves
 
 const User = mongoose.model('users');
 

@@ -1,6 +1,7 @@
 const passport = require('passport'); //importar libreria passport
 
 module.exports = (app) => { //exportar un modulo nodejs con una app como parametro
+    //get es una función middleware o intermedia de express que maneja las solicitudes GET
     app.get(
         '/auth/google', 
         passport.authenticate('google', {

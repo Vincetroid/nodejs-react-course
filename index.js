@@ -10,22 +10,24 @@ mongoose.connect(keys.mongoURI);//de la instancia mongoose, usar el método conn
 
 const app = express(); //crear una instancia de la clase express. crear una app express
 
-app.use(//
-    cookieSession({
+//use se ejecuta cada vez que la app recibe una solicitud
+app.use(//usar el método use del objeto app de express. use es un enlace middleware entre el nivel de la app y el objeto app. es una función de middleware
+    cookieSession({//generar cookie
         maxAge: 30 * 24 * 60 * 60 * 1000,
-        keys: [keys.cookieKey],
+        keys: [keys.cookieKey], //asignar clave a cookie
     })
 );
 
-app.use(passport.initialize());
-app.use(passport.session());
+app.use(passport.initialize());//inicializar autenticación con passport 
+app.use(passport.session());//
 
-require('./routes/authRoutes')(app);
+//pasar como parámetro la aplicación express a las rutas
+require('./routes/authRoutes')(app); 
 
+//decidir el puerto por el que correrá la aplicación
 const PORT = process.env.PORT || 5000;
 
-console.log('app');
-
+//que la app escuche/corra en el puerto seleccionado y notificarlo
 app.listen(PORT, () => {
     console.log(`Our app is running on port ${ PORT }`);
 });
