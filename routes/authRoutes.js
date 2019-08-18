@@ -12,11 +12,14 @@ module.exports = (app) => { //exportar un modulo nodejs con una app como paramet
     app.get('/auth/google/callback', passport.authenticate('google'));
 
     app.get('/api/logout', (req, res) => {
+        console.log('LOGOUT')
         req.logout();
         res.send(req.user);
     }); 
 
     app.get('/api/current_user', (req, res) => {
+        console.log('current_user en autHRoutes');
+        
         res.send(req.user);
     });
 }
